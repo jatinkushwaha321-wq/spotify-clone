@@ -62,56 +62,52 @@ const playMusic = (track, pause = false) => {
 }
 
 async function displayAlbums() {
-    let a = await fetch(`http://127.0.0.1:5500/songs/`)
-    let response = await a.text();
-    let div = document.createElement("div")
-    div.innerHTML = response
-    let anchors = div.getElementsByTagName("a")
-    let cardContainer = document.querySelector(".cardContainer")
-    let array = Array.from(anchors)
-    for (let index = 0; index < array.length; index++) {
-        const e = array[index];
 
+    let a = await fetch("/songs/albums.json");
+    let folders = await a.json();
 
-        if (e.href.includes("/songs/")) {
+    let cardContainer = document.querySelector(".cardContainer");
 
-            let folder = e.href.split("/").slice(-1)[0];
+    for (const folder of folders) {
 
-            if (folder === "songs") return;
+        let a = await fetch(`/songs/${folder}/info.json`);
+        let response = await a.json();
 
-            // console.log(folder);
+        cardContainer.innerHTML += `
+        <div data-folder="${folder}" class="card">
+            <div class="play">
+                <svg width="16" height="16" viewBox="0 0 24 24"
+                     fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 20V4L19 12L5 20Z"
+                          stroke="#141B34"
+                          fill="#000"
+                          stroke-width="1.5"
+                          stroke-linejoin="round"/>
+                </svg>
+            </div>
 
-            let a = await fetch(`http://127.0.0.1:5500/songs/${folder}/info.json`)
-            let response = await a.json();
-            console.log(response);
-            cardContainer.innerHTML = cardContainer.innerHTML + ` <div data-folder="${folder}" class="card">
-                        <div class="play">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <img src="/songs/${folder}/cover.jpg" alt="">
-                        <h2>${response.title}</h2>
-                        <p>${response.description}</p>
-                    </div>`
+            <img src="/songs/${folder}/cover.jpg">
 
-        }
+            <h2>${response.title}</h2>
+
+            <p>${response.description}</p>
+
+        </div>`;
     }
-    Array.from(document.getElementsByClassName("card")).forEach(e => {
 
-        e.addEventListener("click", async item => {
+    Array.from(document.getElementsByClassName("card")).forEach(card => {
+
+        card.addEventListener("click", async item => {
+
             songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
-            playMusic(songs[0])
-        })
 
-    })
+            playMusic(songs[0]);
 
+        });
 
+    });
 
 }
-
 
 async function main() {
     await getSongs("songs/ncs");
