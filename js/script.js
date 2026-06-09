@@ -9,49 +9,51 @@ function formatTime(seconds) {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 async function getSongs(folder) {
+
     currFolder = folder;
-    let a = await fetch(`http://127.0.0.1:5500/${folder}/`)
-    let response = await a.text();
-    let div = document.createElement("div")
-    div.innerHTML = response;
-    let as = div.getElementsByTagName("a")
-    songs = []
-    for (let index = 0; index < as.length; index++) {
-        const element = as[index];
-        if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`/${folder}/`)[1])
-        }
-    }
-    let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0]
-    songUL.innerHTML = ""
+
+    let a = await fetch(`/${folder}/songs.json`);
+    songs = await a.json();
+
+    let songUL = document.querySelector(".songList ul");
+
+    songUL.innerHTML = "";
+
     for (const song of songs) {
-        songUL.innerHTML = songUL.innerHTML + `<li> 
-        
-                            <img class="invert" src="img/music.svg" alt="">
-                            <div class="info">
-                                <div>${song.replaceAll("%20", " ")}</div>
-                                <div></div>
-                            </div>
-                            <div class="playnow">
-                                <span>Play Now</span>
-                                <img class="invert" src="img/play.svg" alt="">
-                            </div>
-                    
-         </li>`
+
+        songUL.innerHTML += `
+        <li>
+            <img class="invert" src="img/music.svg">
+
+            <div class="info">
+                <div>${song}</div>
+                <div></div>
+            </div>
+
+            <div class="playnow">
+                <span>Play Now</span>
+                <img class="invert" src="img/play.svg">
+            </div>
+        </li>`;
     }
 
-    Array.from(document.querySelector(".songList").getElementsByTagName("li")).forEach(e => {
-        e.addEventListener("click", element => {
-            console.log(e.querySelector(".info").firstElementChild.innerHTML);
-            playMusic(e.querySelector(".info").firstElementChild.innerHTML);
-        })
+    Array.from(songUL.getElementsByTagName("li")).forEach(e => {
 
-    })
+        e.addEventListener("click", () => {
+
+            playMusic(
+                e.querySelector(".info").firstElementChild.innerHTML
+            );
+
+        });
+
+    });
+
     return songs;
 }
 
 const playMusic = (track, pause = false) => {
-    currentSong.src = `/${currFolder}/` + track
+    currentSong.src = `${currFolder}/${track}`;
     if (!pause) {
         currentSong.play()
         play.src = "img/pause.svg"
