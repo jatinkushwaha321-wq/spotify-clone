@@ -358,17 +358,20 @@ body {
     .seekbar {
         width: calc(100vw - 70px);
         right: unset;
+        display: none;
     }
-
+    
     .playbar {
         width: calc(100vw - 60px);
         right: 18.5px;
         display: flex;
         justify-content: center;
         align-items: center;
+        display: none;
     }
     .volume{
         padding-bottom: 11px;
+        display: none;
     }
 
 
