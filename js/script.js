@@ -151,7 +151,9 @@ async function main() {
     previous.addEventListener("click", () => {
         currentSong.pause()
         console.log('previous button clicked');
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+        let index = songs.indexOf(
+    decodeURIComponent(currentSong.src.split("/").slice(-1)[0])
+)
         if ((index - 1) >= 0) {
             playMusic(songs[index - 1])
         }
@@ -163,7 +165,9 @@ async function main() {
         currentSong.pause()
         console.log('next button clicked');
 
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
+        let index = songs.indexOf(
+    decodeURIComponent(currentSong.src.split("/").slice(-1)[0])
+)
         if ((index + 1) < songs.length) {
 
             playMusic(songs[index + 1])
