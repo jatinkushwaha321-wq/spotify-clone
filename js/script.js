@@ -135,10 +135,12 @@ async function main() {
     })
 
     document.querySelector(".seekbar").addEventListener("click", e => {
-        let percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100
-        document.querySelector(".circle").style.left = percent + "%";
-        currentSong.currentTime = percent * currentSong.duration / 100
-    })
+    let seekbar = e.currentTarget;
+    let percent = (e.offsetX / seekbar.getBoundingClientRect().width) * 100;
+
+    document.querySelector(".circle").style.left = percent + "%";
+    currentSong.currentTime = (currentSong.duration * percent) / 100;
+});
 
     document.querySelector(".hamburger").addEventListener("click", () => {
         document.querySelector(".left").style.left = "0"
