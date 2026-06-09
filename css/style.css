@@ -279,7 +279,7 @@ body {
     position: relative;
     bottom: 6px;
     left: 0;
-    transition: left 0.3s ease;
+    transition: left 0.5s;
     pointer-events: none;
 }
 
