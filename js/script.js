@@ -135,12 +135,12 @@ async function main() {
     })
 
     document.querySelector(".seekbar").addEventListener("click", e => {
-    let seekbar = e.currentTarget;
-    let percent = (e.offsetX / seekbar.getBoundingClientRect().width) * 100;
+        let seekbar = e.currentTarget;
+        let percent = (e.offsetX / seekbar.getBoundingClientRect().width) * 100;
 
-    document.querySelector(".circle").style.left = percent + "%";
-    currentSong.currentTime = (currentSong.duration * percent) / 100;
-});
+        document.querySelector(".circle").style.left = percent + "%";
+        currentSong.currentTime = (currentSong.duration * percent) / 100;
+    });
 
     document.querySelector(".hamburger").addEventListener("click", () => {
         document.querySelector(".left").style.left = "0"
@@ -152,8 +152,8 @@ async function main() {
         currentSong.pause()
         console.log('previous button clicked');
         let index = songs.indexOf(
-    decodeURIComponent(currentSong.src.split("/").slice(-1)[0])
-)
+            decodeURIComponent(currentSong.src.split("/").slice(-1)[0])
+        )
         if ((index - 1) >= 0) {
             playMusic(songs[index - 1])
         }
@@ -166,8 +166,8 @@ async function main() {
         console.log('next button clicked');
 
         let index = songs.indexOf(
-    decodeURIComponent(currentSong.src.split("/").slice(-1)[0])
-)
+            decodeURIComponent(currentSong.src.split("/").slice(-1)[0])
+        )
         if ((index + 1) < songs.length) {
 
             playMusic(songs[index + 1])
